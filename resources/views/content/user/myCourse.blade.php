@@ -27,7 +27,7 @@
                         <div class="product-item">
                             <a href="{{ route('home.viewCourse', $course->id) }}">
                                 <div class="product-item-img"
-                                    style="background-image: url({{ asset('images/' . $course->image) }});">
+                                    style="background-image: url({{  $course->image }});">
                                 </div>
                                 <br>
                                 <div class="product-item-name">{{ $course->name }}</div>
