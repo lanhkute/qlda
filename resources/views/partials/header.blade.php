@@ -45,7 +45,7 @@
               <i class="mdi mdi-cached me-2 text-success"></i> Activity Log </a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="{{ route('admin.logout') }}">
-              <i class="mdi mdi-logout me-2 text-primary"></i> Signout </a>
+              <i class="mdi mdi-logout me-2 text-primary"></i> Sign out </a>
           </div>
         </li>
         <li class="nav-item d-none d-lg-block full-screen-link">

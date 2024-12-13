@@ -351,4 +351,7 @@ class homeViewController extends Controller
         ]);
     }
 
+    public function forgotPassword() {
+        return view("content.user.forgotpw");
+    }
 }
