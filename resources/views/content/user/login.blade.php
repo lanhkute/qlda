@@ -53,7 +53,8 @@
                                     <i class="fas fa-lock"></i>
                                     <input name="password" type="password" placeholder="Enter your password" required>
                                 </div>
-                                <div class="text"><a href="#">Forgot password?</a></div>
+                                <!-- <div class="text"><a href="#">Forgot password?</a></div> -->
+                                 <div class="text"><a href="{{ route('user.forgotpw') }}">Forgot password?</a></div>
                                 <div class="button input-box">
                                     <input type="submit" value="Submit">
                                 </div>
