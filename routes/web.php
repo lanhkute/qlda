@@ -120,5 +120,6 @@ Route::get('/gio-hang', [homeViewController::class , 'myCart'])->name('home.myCa
 
 Route::get('/', [homeViewController::class , 'course'])->name('home.course');
 Route::get('/fotgot-pw', [homeViewController::class , 'forgotPassword'])->name('user.forgotpw');
+Route::post('/reset-password', [homeViewController::class , 'resetPassword'])->name('user.resetPassword');
 Route::post('/send-otp', [homeViewController::class , 'sendOtp'])->name('user.sendOtp');
 // User

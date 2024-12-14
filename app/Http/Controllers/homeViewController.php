@@ -11,6 +11,9 @@ use App\Models\result;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use App\Mail\OtpMail;
+use App\Models\user;
+
 
 class homeViewController extends Controller
 {
@@ -413,17 +416,38 @@ class homeViewController extends Controller
     }
 
     public function sendOtp(Request $request) {
-        $data = array('name'=>"Ogbonna Vitalis",'body' => "This is the body of the email");
-
-        try { 
-        Mail::raw('This email confirms that everything was set up correctly!', function ($message) { 
-            $message->to('luongtuan27081102@email.com') 
-            ->subject('Testing Laravel + Mailgun'); 
-         }); 
-        } catch (Exception $e) { 
-            return response (['status' => false, 'message' => $e->getMessage()]);
+        $otp = rand(1000, 9999);
+        // save in db
+        $email = $request->get('email');
+        $user = User::where('email', $email)->first();
+        if ($user) {
+            $user->otp = $otp;
+            $user->save();
+        } else {
+            return response()->json(['status' => 'error', 'message' => 'Người dùng không tồn tại']);
         }
 
-        return true;
+        try { 
+            Mail::to($email)->send(new OtpMail($user->name, "0000"));
+        } catch (Exception $e) { 
+            return  $e->getMessage();
+        }
+
+        return response()->json(['status' => 'success', 'message' => 'Gửi mã OTP thành công']);
+    }
+
+    public function resetPassword(Request $request) {
+        $email = $request->get('email');
+        $otp = $request->get('otp');
+        $password = $request->get('password');
+        $user = User::where('email', $email)->where('otp', $otp)->first();
+        if ($user) {
+            $user->password = bcrypt($password);
+            $user->otp = null;
+            $user->save();
+            return response()->json(['status' => 'success', 'message' => 'Đổi mật khẩu thành công']);
+        } else {
+            return response()->json(['status' => 'error', 'message' => 'Mã OTP không chính xác']);
+        }
     }
 }

@@ -22,14 +22,15 @@
     <div class="footer-infor">
         <div class="footer-header">LIÊN HỆ</div>
         <ul class="footer-content">
-            <li class="footer-content-item"><a href=""><i class=" footer-icon fa-solid fa-location-arrow"></i>128 Hai Bà Trưng, Hoàng Mai, Hà Nội, Việt Nam</a></li>
+            <li class="footer-content-item"><a href=""><i class=" footer-icon fa-solid fa-location-arrow"></i>128 Hai Bà
+                    Trưng, Hoàng Mai, Hà Nội, Việt Nam</a></li>
             <li class="footer-content-item"><a href=""><i class=" footer-icon fa-solid fa-envelope"></i>Email:
                     savoir@gmail.com</a></li>
             <li class="footer-content-item"><a href=""><i class=" footer-icon fa-solid fa-phone"></i>Phone:
                     0396396332</a></li>
-            <li class="footer-content-item"><a href=""><i
-                        class=" footer-icon fa-brands fa-facebook"></i>Facebook </a></li>
+            <li class="footer-content-item"><a href=""><i class=" footer-icon fa-brands fa-facebook"></i>Facebook </a>
+            </li>
         </ul>
     </div>
 </div>
-<div class="copyright">© 2024 copyright Công ty TNHH Savoir Việt Nam</div>
+<p class="copyright">© 2024 copyright Công ty TNHH Savoir Việt Nam</p>

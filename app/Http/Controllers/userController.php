@@ -38,7 +38,10 @@ class userController extends Controller
             session()->put('id', $user->id);
             session()->put('name', $user->name);
             session()->put('image', $user->image);
-            return redirect()->route('home.course');
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Đăng nhập thành công',
+            ]);
         } catch (\Throwable $th) {
             return redirect()->route('user.login')->with('error-login','Tài khoản hoặc mật khẩu không đúng');
         }
