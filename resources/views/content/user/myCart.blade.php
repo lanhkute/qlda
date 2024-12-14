@@ -87,9 +87,7 @@
                         @if (!Session::has('id'))
                             type="button" onclick="alert('Ban Phai Dang Nhap')"
                         @endif
-                        style="cursor: not-allowed"
-                        type="button"
-                        >Mua</button>
+                        style="cursor: not-allowed" type="button">Mua</button>
                     </form>
                 </div>
             </div>

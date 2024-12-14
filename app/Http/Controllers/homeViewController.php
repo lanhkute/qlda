@@ -10,6 +10,7 @@ use App\Models\question;
 use App\Models\result;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class homeViewController extends Controller
 {
@@ -149,16 +150,72 @@ class homeViewController extends Controller
         session()->forget('price_course');
         session()->forget('author_course');
 
-        for ($i = 0; $i < count($id) ; $i++) {
-            if(in_array($id[$i], $id_oder)){
-                session()->push('id_course', $id[$i]);
-                session()->push('name_course', $name[$i]);
-                session()->push('price_course', $price[$i]);
-                session()->push('author_course', $author[$i]);
-            }
+        // for ($i = 0; $i < count($id) ; $i++) {
+        //     if(in_array($id[$i], $id_oder)){
+        //         session()->push('id_course', $id[$i]);
+        //         session()->push('name_course', $name[$i]);
+        //         session()->push('price_course', $price[$i]);
+        //         session()->push('author_course', $author[$i]);
+        //     }
+        // }
+
+
+        $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
+        $vnp_Returnurl = "http://127.0.0.1:8000/khoa-hoc-cua-toi";
+        $vnp_TmnCode = config('services.vnpay.tmncode');
+        $vnp_HashSecret = config('services.vnpay.hashsecret');
+        $vnp_TxnRef = date("YmdHis");
+        $vnp_OrderInfo = 'Thanh toán đơn hàng';
+        $vnp_OrderType = 'billpayment';
+        $vnp_Amount = $price[0] * 100;
+        $vnp_Locale = 'vn';
+        $vnp_BankCode = 'VNBANK';
+        $vnp_IpAddr = request()->ip();
+
+        $inputData = array(
+            "vnp_Version" => "2.1.0",
+            "vnp_TmnCode" => $vnp_TmnCode,
+            "vnp_Amount" => $vnp_Amount,
+            "vnp_Command" => "pay",
+            "vnp_CreateDate" => date('YmdHis'),
+            "vnp_CurrCode" => "VND",
+            "vnp_Locale" => $vnp_Locale,
+            "vnp_OrderInfo" => $vnp_OrderInfo,
+            "vnp_OrderType" => $vnp_OrderType,
+            "vnp_ReturnUrl" => $vnp_Returnurl,
+            "vnp_TxnRef" => $vnp_TxnRef,
+            "vnp_IpAddr" => $vnp_IpAddr
+        );
+
+
+        if (isset($vnp_BankCode) && $vnp_BankCode != "") {
+            $inputData['vnp_BankCode'] = $vnp_BankCode;
+        }
+        if (isset($vnp_Bill_State) && $vnp_Bill_State != "") {
+            $inputData['vnp_Bill_State'] = $vnp_Bill_State;
         }
 
-        return redirect()->route('home.myCourse');
+        ksort($inputData);
+        $query = "";
+        $i = 0;
+        $hashdata = "";
+        foreach ($inputData as $key => $value) {
+            if ($i == 1) {
+                $hashdata .= '&' . urlencode($key) . "=" . urlencode($value);
+            } else {
+                $hashdata .= urlencode($key) . "=" . urlencode($value);
+                $i = 1;
+            }
+            $query .= urlencode($key) . "=" . urlencode($value) . '&';
+        }
+
+        $vnp_Url = $vnp_Url . "?" . $query;
+        if (isset($vnp_HashSecret)) {
+            $vnpSecureHash =   hash_hmac('sha512', $hashdata, $vnp_HashSecret);//
+            $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
+        }
+
+        return redirect()->to($vnp_Url);
     }
 
     public function myCourse(){
@@ -353,5 +410,20 @@ class homeViewController extends Controller
 
     public function forgotPassword() {
         return view("content.user.forgotpw");
+    }
+
+    public function sendOtp(Request $request) {
+        $data = array('name'=>"Ogbonna Vitalis",'body' => "This is the body of the email");
+
+        try { 
+        Mail::raw('This email confirms that everything was set up correctly!', function ($message) { 
+            $message->to('luongtuan27081102@email.com') 
+            ->subject('Testing Laravel + Mailgun'); 
+         }); 
+        } catch (Exception $e) { 
+            return response (['status' => false, 'message' => $e->getMessage()]);
+        }
+
+        return true;
     }
 }
