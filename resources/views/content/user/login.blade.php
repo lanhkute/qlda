@@ -133,7 +133,7 @@ document.getElementById('form').addEventListener('submit', function(e) {
         })
         .catch(error => {
             console.error('Đã xảy ra lỗi:', error);
-            alert('Đã xảy ra lỗi. Vui lòng thử lại sau.');
+            alert('Tài khoản hoặc mật khẩu không đúng');
         });
 });
 </script>

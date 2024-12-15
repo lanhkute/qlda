@@ -152,7 +152,7 @@ table {
                 # Đánh giá sản phẩm
             </div>
             @if ($check == 3)
-            <form method="post" action="{{ route('home.ratingCourse', $courses->id) }}">
+            <form method="post" id="form" action="{{ route('home.ratingCourse', $courses->id) }}">
                 @csrf
                 <fieldset class="rating">
                     <input type="radio" id="star5" name="rating" value="5" /><label class="full" for="star5"
@@ -199,25 +199,45 @@ table {
 
             @foreach ($order_rate as $order)
             <div class="user-comment">
-                <p style="font-size: 15px">
-                    Ngày: {{ date('d-m-Y', strtotime($order->updated_at)) }}
-                </p>
-                <div class="rating-account" style="margin-top: 7px">
-                    <img class="img-rating-account" src="{{ asset("images/avatar/avt.jpg") }}" alt="">
-                    <div class="name-and-rating">
-                        <p>
-                            Tên: {{ $order->name }}
-                        </p>
-                        <p>
-                            @for ($i = 0; $i < $order->rate; $i++)
-                                <i class="fa-solid fa-star" style="color: rgb(230, 83, 39);"></i>
-                                @endfor
-                        </p>
+                <div class="">
+                    <p style="font-size: 15px">
+                        Ngày: {{ date('d-m-Y', strtotime($order->updated_at)) }}
+                    </p>
+                    <div class="rating-account" style="margin-top: 7px">
+                        <img class="img-rating-account" src="{{ asset("images/avatar/avt.jpg") }}" alt="">
+                        <div class="name-and-rating">
+                            <p>
+                                Tên: {{ $order->name }}
+                            </p>
+                            <p>
+                                @for ($i = 0; $i < $order->rate; $i++)
+                                    <i class="fa-solid fa-star" style="color: rgb(230, 83, 39);"></i>
+                                    @endfor
+                            </p>
+                        </div>
+                    </div>
+                    <div style="font-size: 17px; margin-top: 10px">
+                        {{ $order->comment }}
                     </div>
                 </div>
-                <div style="font-size: 17px; margin-top: 10px">
-                    {{ $order->comment }}
-                </div>
+                {{-- Xóa đánh giá --}}
+                @if ($order->id_user == session('id'))
+                <form id="delete_rating" method="POST" action="{{ route('home.deleteRatingCourse', $courses->id) }}">
+                    @csrf
+                    <button>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-trash-2">
+                            <path d="M3 6h18" />
+                            <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+                            <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                            <line x1="10" x2="10" y1="11" y2="17" />
+                            <line x1="14" x2="14" y1="11" y2="17" />
+                        </svg>
+                    </button>
+                </form>
+                @endif
+                {{-- Xóa đánh giá --}}
             </div>
             @endforeach
             <br>
@@ -233,5 +253,16 @@ table {
 @if($my_order != null)
 document.getElementById("star{{ $my_order->rate }}").checked = true;
 @endif
+document.getElementById("form").addEventListener("submit", function(event) {
+    if (document.querySelector('input[name="rating"]:checked') == null) {
+        alert("Vui lòng chọn số sao");
+        event.preventDefault();
+    }
+});
+document.getElementById("delete_rating").addEventListener("submit", function(event) {
+    if (!confirm("Bạn có chắc chắn muốn xóa đánh giá này?")) {
+        event.preventDefault();
+    }
+});
 </script>
 @stop

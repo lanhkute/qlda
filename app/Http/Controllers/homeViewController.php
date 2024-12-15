@@ -49,10 +49,11 @@ class homeViewController extends Controller
             ->get();
 
         $order_rate = order::query()
-            ->select('orders.rate', 'orders.comment', 'orders.updated_at', 'users.name', 'users.image')
+            ->select('orders.rate', 'orders.comment', 'orders.updated_at', 'users.name', 'users.image', 'users.id as id_user', "orders.id as id_order")
             ->join('users', 'orders.users_id', '=', 'users.id')
             ->where('orders.courses_id', '=', $course_id)
             ->where('orders.rate', '!=', 'null')
+            ->orderBy('orders.updated_at', 'desc')
             ->paginate(10);
 
         $my_order = order::query()
@@ -244,6 +245,17 @@ class homeViewController extends Controller
         ->update([
             'rate' => $request->get('rating'),
             'comment' => $request->get('comment')
+        ]);
+        return redirect()->route('home.viewCourse', $course_id);
+    }
+    
+    public function deleteRatingCourse(Request $request, $course_id){
+        DB::table('orders')
+        ->where('users_id', '=', session()->get('id'))
+        ->where('courses_id', '=', $course_id)
+        ->update([
+            'rate' => null,
+            'comment' => null
         ]);
         return redirect()->route('home.viewCourse', $course_id);
     }
