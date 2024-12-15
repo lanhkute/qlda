@@ -49,10 +49,11 @@ class homeViewController extends Controller
             ->get();
 
         $order_rate = order::query()
-            ->select('orders.rate', 'orders.comment', 'orders.updated_at', 'users.name', 'users.image')
+            ->select('orders.rate', 'orders.comment', 'orders.updated_at', 'users.name', 'users.image', "orders.id")
             ->join('users', 'orders.users_id', '=', 'users.id')
             ->where('orders.courses_id', '=', $course_id)
             ->where('orders.rate', '!=', 'null')
+            ->orderBy('id', 'desc')
             ->paginate(10);
 
         $my_order = order::query()
