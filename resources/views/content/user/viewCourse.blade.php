@@ -78,12 +78,10 @@ table {
                 </p>
                 <p>
                     @if ($check == 1)
-                    <a href="{{ route('home.orderCourse', $courses->id) }}">
-                        <button class="btn-action-course">
-                            Đặt khóa học
+                        <button class="btn-action-course dat_hang">
+                            Thêm vào giỏ hàng
                             <i class="fa-solid fa-cart-plus"></i>
                         </button>
-                    </a>
                     @elseif ($check == 2)
                     <a href="{{ route('home.myCart') }}">
                         <button class="btn-action-course">
@@ -252,19 +250,51 @@ table {
 
 @section('js')
 <script>
+// Kiểm tra nếu $my_order không null, tự động đánh dấu sao tương ứng
 @if($my_order != null)
+@if($my_order->rate != null)
 document.getElementById("star{{ $my_order->rate }}").checked = true;
-@endif
-document.getElementById("form").addEventListener("submit", function(event) {
-    if (document.querySelector('input[name="rating"]:checked') == null) {
-        alert("Vui lòng chọn số sao");
-        event.preventDefault();
-    }
-});
+// Xử lý sự kiện submit form xóa đánh giá
 document.getElementById("delete_rating").addEventListener("submit", function(event) {
     if (!confirm("Bạn có chắc chắn muốn xóa đánh giá này?")) {
         event.preventDefault();
     }
 });
+@endif
+@endif
+
+@if($my_order != null)
+// Xử lý sự kiện submit form đánh giá
+document.getElementById("form").addEventListener("submit", function(event) {
+    // Kiểm tra nếu người dùng chưa chọn sao
+    if (document.querySelector('input[name="rating"]:checked') == null) {
+        alert("Vui lòng đánh giá sao");
+        event.preventDefault();
+        return;
+    }
+
+    // Kiểm tra nếu phần bình luận rỗng
+    if (document.querySelector("textarea.comment-course").value.trim() == "") {
+        alert("Vui lòng viết đánh giá");
+        event.preventDefault();
+        return;
+    }
+});
+@endif
+
+
+// Xử lý sự kiện đặt mua khoá học
+document.querySelector(".dat_hang").addEventListener("click", function() {
+    fetch("{{ route('home.orderCourse', $courses->id) }}")
+        .then(response => response.json())
+        .then(data => {
+            if (data.status == "success") {
+                alert("Thêm vào giỏ hàng thành công");
+                window.location.reload();
+            }
+        })
+        .catch(error => console.error('Error:', error));
+});
+
 </script>
 @stop

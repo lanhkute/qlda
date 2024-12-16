@@ -47,7 +47,7 @@
                         </tr>
                     @endfor
                 </table>
-                <h3>Tổng tiền: <span id="price-total">0</span>VND</h3>   
+                <h3>Tổng tiền: <span id="price-total">0</span> VND</h3>   
                 @else
                     <div class="content_mid_table">
                         <p>Bạn ơi giỏ hàng của bạn đang trống kìa hãy lụm thêm vài sản phẩm vào nào !!!</p>

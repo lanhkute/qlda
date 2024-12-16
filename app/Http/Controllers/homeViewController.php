@@ -98,7 +98,7 @@ class homeViewController extends Controller
         session()->push('price_course', $course->price);
         session()->push('author_course', $course->author);
 
-        return redirect()->route('home.viewCourse', $course_id);
+        return response()->json(['status' => 'success', 'message' => 'Đã thêm khóa học vào giỏ hàng']);
     
     }
 
@@ -122,7 +122,7 @@ class homeViewController extends Controller
             }
         }
 
-        return redirect()->route('home.myCart');
+        return response()->json(['status' => 'success', 'message' => 'Đã xóa khóa học khỏi giỏ hàng']);
     }
 
     public function buyCourse(Request $request){
@@ -244,7 +244,8 @@ class homeViewController extends Controller
         ->where('courses_id', '=', $course_id)
         ->update([
             'rate' => $request->get('rating'),
-            'comment' => $request->get('comment')
+            'comment' => $request->get('comment'),
+            'updated_at' => now()
         ]);
         return redirect()->route('home.viewCourse', $course_id);
     }
@@ -307,11 +308,42 @@ class homeViewController extends Controller
             ->where('lessons.courses_id', '=', $course_id)
             ->groupBy('lessons.id')
             ->get();
+
+            $order_rate = order::query()
+            ->select('orders.rate', 'orders.comment', 'orders.updated_at', 'users.name', 'users.image', 'users.id as id_user', "orders.id as id_order")
+            ->join('users', 'orders.users_id', '=', 'users.id')
+            ->where('orders.courses_id', '=', $course_id)
+            ->where('orders.rate', '!=', 'null')
+            ->orderBy('orders.updated_at', 'desc')
+            ->paginate(10);
+
+        $my_order = order::query()
+            ->select('*')
+            ->where('users_id', '=', session()->get('id'))
+            ->where('courses_id', '=', $course_id)
+            ->first();
+        
+        $check = 1;
+        if(session()->has('id_course')){
+            foreach (session()->get('id_course') as $cour){
+                if ($cour == $course_id){
+                    $check = 2;
+                }
+            }
+        }
+
+        if (isset($my_order->id)){
+            $check = 3;
+        }
+
         return view('content.user.learnCourse',[
             'lessons'       => $lessons,
             'course_id'     => $course_id,
             'lesson_id'     => $lesson_id,
             'number_learn'  => $course_check->number_view,
+            'check'      => $check,
+            'order_rate' => $order_rate,
+            'my_order'   => $my_order,
         ]);
     }
 
