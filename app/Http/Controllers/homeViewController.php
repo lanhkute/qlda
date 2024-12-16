@@ -440,7 +440,7 @@ class homeViewController extends Controller
         }
 
         try { 
-            Mail::to($email)->send(new OtpMail($user->name, "0000"));
+            Mail::to($email)->send(new OtpMail($user->name, $otp));
         } catch (Exception $e) { 
             return  $e->getMessage();
         }
