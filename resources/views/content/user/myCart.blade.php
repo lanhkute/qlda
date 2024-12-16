@@ -40,7 +40,7 @@
                             </th>
                             <th> {{ Session::get('author_course')[$i] }} </th>
                             <th> {{ Session::get('price_course')[$i] }} VND</th>
-                            <th><a href="{{ route('home.unOrderCourse', Session::get('id_course')[$i]) }}">xoá</a></th>
+                            <th><button class="xoa" onclick="deleteCourse('{{ Session::get('id_course')[$i] }}')">xoá</button></th>
                             <th data-id={{ Session::get('id_course')[$i] }} data-price={{ Session::get('price_course')[$i] }}>
                                 <input class="check-value" type="checkbox">
                             </th>
@@ -145,5 +145,19 @@
             }
         })
     });
+
+    const deleteCourse = (id) => {
+        $.ajax({
+            url: `/khoa-hoc/ma-${id}/huy-dat-hang`,
+            type: "GET",
+            data: {
+                _token: "{{ csrf_token() }}"
+            },
+            success: function (response) {
+                alert('Xoá thành công');
+                window.location.reload();
+            }
+        })
+    } 
 </script>
 @stop
