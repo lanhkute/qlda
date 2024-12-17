@@ -18,31 +18,33 @@
                     <div class="col-lg-4 mx-auto">
                         <div class="auth-form-light text-left p-5">
                             @if(Session::has('success'))
-                                <h4 class="text-success">{{ Session::get('success') }}</h4>
+                            <h4 class="text-success">{{ Session::get('success') }}</h4>
                             @endif
                             @if(Session::has('error'))
-                                <h4 class="text-danger">{{ Session::get('error') }}</h4>
+                            <h4 class="text-danger">{{ Session::get('error') }}</h4>
                             @endif
                             <h6 class="font-weight-light">Sign in to continue.</h6>
                             <form class="pt-3" method="post" action={{ route('admin.processing.login') }}>
                                 @csrf
                                 <div class="form-group">
-                                    <input type="email" name="email" class="form-control form-control-lg" id="exampleInputEmail1"
-                                        placeholder="Email" required>
+                                    <input type="email" name="email" class="form-control form-control-lg"
+                                        id="exampleInputEmail1" placeholder="Email" required>
                                 </div>
                                 <div class="form-group">
-                                    <input type="password" name="password"class="form-control form-control-lg"
+                                    <input type="password" name="password" class="form-control form-control-lg"
                                         id="exampleInputPassword1" placeholder="Password" required>
                                 </div>
                                 <div class="mt-3">
-                                    <button class="btn btn-block btn-gradient-primary btn-lg font-weight-medium auth-form-btn">SIGN IN</button>
+                                    <button
+                                        class="btn btn-block btn-gradient-primary btn-lg font-weight-medium auth-form-btn">SIGN
+                                        IN</button>
                                 </div>
                                 <div class="my-2 d-flex justify-content-between align-items-center">
                                     <div class="form-check">
                                         <label class="form-check-label text-muted">
                                             <input type="checkbox" class="form-check-input"> Keep me signed in </label>
                                     </div>
-                                    <a href="#" class="auth-link text-black">Forgot password?</a>
+                                    <a href="/admin/forgotpw" class="auth-link text-black">Forgot password?</a>
                                 </div>
                                 <div class="text-center mt-4 font-weight-light"> Don't have an account? <a
                                         href="{{ route('admin.register') }}" class="text-primary">Create</a>

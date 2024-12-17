@@ -8,7 +8,10 @@ use Exception;
 use Illuminate\Support\Facades\File; 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
+use App\Mail\OtpMail;
+
 
 class authAdminController extends Controller
 {
@@ -27,6 +30,42 @@ class authAdminController extends Controller
             return redirect()->route('admin.register')->with('error','Email Đã được sử dụng');
         }
     }
+
+    public function sendOtp(Request $request){
+        try {
+            $admin = admin::query()
+            ->where('email', $request->get('email'))
+            ->firstOrFail();
+            $otp = rand(100000, 999999);
+            $admin->otp = $otp;
+            $admin->save();
+            $data = array(
+                'otp' => $otp,
+            );
+            Mail::to($request->get('email'))->send(new OtpMail($admin->name, $otp));
+            return response()->json(['success' => 'Gửi mã OTP thành công']);
+        } catch (\Throwable $th) {
+            return $th;
+            return response()->json(['error' => 'Email không tồn tại']);
+        }
+    }
+
+    public function changePw(Request $request){
+        try {
+            $admin = admin::query()
+            ->where('email', $request->get('email'))
+            ->firstOrFail();
+            if ($admin->otp != $request->get('otp')){
+                return redirect()->route('admin.login')->with('error','Mã OTP không đúng');
+            }
+            $admin->password = Hash::make($request->get('password'));
+            $admin->save();
+            return redirect()->route('admin.login')->with('success','Đổi mật khẩu thành công');
+        } catch (\Throwable $th) {
+            return redirect()->route('admin.login')->with('error','Email không tồn tại');
+        }
+    }
+
     public function login(Request $request){
         try {
             $admin = admin::query()
