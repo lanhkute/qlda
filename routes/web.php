@@ -37,7 +37,7 @@ Route::group([
 
     Route::get('/admin/forgotpw', function () {
         return view('auth.forgotpwAdmin');
-    })->name('admin.register');
+    })->name('admin.refffff');
     
 
     Route::post('/admin/send-otp', [authAdminController::class, 'sendOtp'])->name('admin.processing.send-otp');
