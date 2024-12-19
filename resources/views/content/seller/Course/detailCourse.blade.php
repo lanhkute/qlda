@@ -40,7 +40,7 @@ Quản lý khóa học
             <div class="page-title">Xem Tổng thể</div>
             <div class="content">
                 <div class="img-pre">
-                    <img id="img-preview" src="/public/images/avatar/avt.jpg" alt="" />
+                    <img id="img-preview" src="{{ $data->image }}" alt="" />
                 </div>
                 <div class="cart-details">
                     <h3><u>Tên khóa học</u>: {{ $data->name }} </h3>
@@ -171,7 +171,7 @@ Quản lý khóa học
                 </p>
                 <div class="comment-info">
                     <div class="comment-avatar">
-                        <img src="http://web_khoa_hoc.com/images/avatar/avatar.jpg" alt="">
+                        <img src="/public/images/avatar/avt.jpg" alt="">
                     </div>
                     <div class="comment-name">
                         <p>
