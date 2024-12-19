@@ -56,7 +56,7 @@ class SellerController extends Controller
                     'price'  => $request->get('price'),
                     'image'  => $filename,
                     'price'  => $request->get('price'),
-                    'description'  => $request->get('description'),
+                    'description'  => $request->get('description') || "",
                 ]);
             return redirect()->route('seller.detailCourse', $course->id);
         // } catch (\Throwable $th) {
