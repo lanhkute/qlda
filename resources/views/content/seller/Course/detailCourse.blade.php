@@ -171,7 +171,7 @@ Quản lý khóa học
                 </p>
                 <div class="comment-info">
                     <div class="comment-avatar">
-                        <img src="{{asset('images/avatar/avt.png')}}" alt="">
+                        <img src="{{ asset("images/avatar/avt.jpg") }}" alt="">
                     </div>
                     <div class="comment-name">
                         <p>
